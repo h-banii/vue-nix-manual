@@ -1,0 +1,11 @@
+{
+  "name": "vue-nix-manual",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "author": "h-banii",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "vue": "^3.5.21"
+  }
+}
