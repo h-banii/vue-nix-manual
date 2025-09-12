@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "author": "h-banii",
   "license": "MIT",
-  "description": "",
+  "description": "Vue components to create web manuals for nix modules.",
   "devDependencies": {
     "vue": "^3.5.21"
   }
