@@ -15,6 +15,20 @@
         v-model="searchText"
       />
     </div>
+    <div :class="$style['chip-container']" v-if="!!searchFilters.length">
+      <span>Filters:</span>
+      <div v-for="(filter, index) in searchFilters" :key="index">
+        <input
+          type="checkbox"
+          :id="`filter${index}`"
+          v-model="filter.checked"
+          @input="filterToggle($event, index)"
+        />
+        <label :for="`filter${index}`" :class="$style['chip']">
+          {{ filter.label }}
+        </label>
+      </div>
+    </div>
     <hr />
     <div v-for="(value, key, _) in data" :key="key">
       <div v-if="searchMatch(key, searchText)">
@@ -67,12 +81,33 @@
 import { ref, onMounted } from "vue";
 import mockedOptions from "./options.mock.json";
 
-const props = defineProps(["file"]);
+const props = defineProps({
+  file: {
+    type: String,
+    default: "",
+  },
+  filters: {
+    type: Array,
+    default: [
+      {
+        match: "options",
+        label: "options",
+        checked: false,
+      },
+      {
+        match: "plugins",
+        label: "plugins",
+        checked: false,
+      },
+    ],
+  },
+});
 
 const searchText = ref("");
+const searchFilters = ref(props.filters);
 const data = ref(mockedOptions);
 
-if (import.meta.env.PROD) {
+if (import.meta.env.PROD && !!props.file) {
   onMounted(() =>
     fetch(props.file)
       .then((res) => res.json())
@@ -81,8 +116,21 @@ if (import.meta.env.PROD) {
   );
 }
 
+function filterToggle(event, checkedIndex) {
+  searchFilters.value.forEach((filter, index) => {
+    if (index == checkedIndex) {
+      return;
+    }
+    filter.checked = false;
+  });
+}
+
 function searchMatch(key, search) {
-  return !search || key.includes(search);
+  const activeFilters = searchFilters.value.filter((f) => f.checked);
+  return (
+    (!search || key.includes(search)) &&
+    (!activeFilters.length || activeFilters.some((f) => key.includes(f.match)))
+  );
 }
 </script>
 
@@ -105,6 +153,33 @@ function searchMatch(key, search) {
   &:hover {
     outline: 2px var(--vp-local-search-highlight-bg) solid;
     border-radius: 5px;
+  }
+}
+
+.chip-container {
+  display: flex;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  input {
+    display: none;
+    &:checked + .chip {
+      border: 1px var(--vp-local-search-highlight-bg) solid;
+    }
+  }
+
+  .chip {
+    margin-left: 8px;
+    padding: 6px;
+    border: 1px var(--vp-input-border-color) solid;
+    border-radius: 16px;
+
+    &:hover {
+      outline: 2px var(--vp-local-search-highlight-bg) solid !important;
+    }
   }
 }
 
