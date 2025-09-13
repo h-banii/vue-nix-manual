@@ -6,7 +6,8 @@
   "description": "Vue components to create web manuals for nix modules.",
   "module": "./dist/vue-nix-manual.mjs",
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "prepare": "vite build"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",
