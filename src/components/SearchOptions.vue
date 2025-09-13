@@ -84,7 +84,11 @@ import mockedOptions from "./options.mock.json";
 const props = defineProps({
   file: {
     type: String,
-    default: "",
+    default: null,
+  },
+  options: {
+    type: Object,
+    default: null,
   },
   filters: {
     type: Array,
@@ -105,9 +109,9 @@ const props = defineProps({
 
 const searchText = ref("");
 const searchFilters = ref(props.filters);
-const data = ref(mockedOptions);
+const data = ref(!!props.options ? props.options : mockedOptions);
 
-if (import.meta.env.PROD && !!props.file) {
+if (!!props.file) {
   onMounted(() =>
     fetch(props.file)
       .then((res) => res.json())
