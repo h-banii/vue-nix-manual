@@ -8,7 +8,7 @@
   "module": "./dist/vue-nix-manual.mjs",
   "scripts": {
     "build": "vite build",
-    "prepare": "vite build"
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",

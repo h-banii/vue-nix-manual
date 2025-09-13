@@ -25,6 +25,11 @@
               pname = "vue-nix-manual";
               version = "1.0.0";
 
+              postPatch = ''
+                substituteInPlace package.json \
+                  --replace 'npm run build' ':'
+              '';
+
               src = nix-gitignore.gitignoreSourcePure [
                 ./.gitignore
                 "result\n"
