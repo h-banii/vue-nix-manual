@@ -13,6 +13,37 @@
       pkgsFor = forAllSystems (system: nixpkgs.legacyPackages.${system});
     in
     {
+      packages = forAllSystems (
+        system:
+        let
+          pkgs = pkgsFor.${system};
+        in
+        {
+          default =
+            with pkgs;
+            buildNpmPackage {
+              pname = "vue-nix-manual";
+              version = "1.0.0";
+
+              src = nix-gitignore.gitignoreSourcePure [
+                ./.gitignore
+                "result\n"
+                "README.md\n"
+                "flake.*\n"
+              ] (lib.cleanSource ./.);
+
+              npmDeps = importNpmLock {
+                npmRoot = ./.;
+              };
+
+              npmConfigHook = importNpmLock.npmConfigHook;
+
+              allowSubstitutes = false;
+              preferLocalBuild = true;
+            };
+        }
+      );
+
       devShells = forAllSystems (
         system:
         let
