@@ -162,6 +162,8 @@ function searchMatch(key, search) {
 
 .chip-container {
   display: flex;
+  flex-wrap: wrap;
+  gap: 16px 8px;
 
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -176,7 +178,6 @@ function searchMatch(key, search) {
   }
 
   .chip {
-    margin-left: 8px;
     padding: 6px;
     border: 1px var(--vp-input-border-color) solid;
     border-radius: 16px;
