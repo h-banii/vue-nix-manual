@@ -9,6 +9,16 @@ export default defineConfig({
       entry: "./src/index.js",
       name: "vue-nix-manual",
     },
+    rollupOptions: {
+      external: ["vue"],
+      //input: ["index.ts"],
+      output: {
+        globals: {
+          vue: "Vue",
+        },
+        dir: "dist",
+      },
+    },
   },
   plugins: [vue(), cssInjectedByJsPlugin()],
 });

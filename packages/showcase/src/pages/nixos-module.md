@@ -1,3 +1,3 @@
 # NixOS Module
 
-<SearchOptions file='@nixos-module@' />
+<SearchOptions file='./options.json' />
