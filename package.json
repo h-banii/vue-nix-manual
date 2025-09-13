@@ -1,11 +1,16 @@
 {
   "name": "vue-nix-manual",
   "version": "1.0.0",
-  "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
-  "keywords": [],
   "author": "h-banii",
-  "license": "MIT"
+  "license": "MIT",
+  "description": "Vue components to create web manuals for nix modules.",
+  "module": "./dist/vue-nix-manual.mjs",
+  "scripts": {
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "vite": "^7.1.5",
+    "vite-plugin-css-injected-by-js": "^3.5.2"
+  }
 }
