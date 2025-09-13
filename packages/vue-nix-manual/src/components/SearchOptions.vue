@@ -64,25 +64,21 @@
 </template>
 
 <script setup>
-import { useData } from "vitepress";
 import { ref, onMounted } from "vue";
 import mockedOptions from "./options.mock.json";
 
 const props = defineProps(["file"]);
 
 const searchText = ref("");
-const data = ref({});
-const { site } = useData();
+const data = ref(mockedOptions);
 
 if (import.meta.env.PROD) {
   onMounted(() =>
-    fetch(site.fn().base + props.file)
+    fetch(props.file)
       .then((res) => res.json())
       .then((json) => (data.value = json))
       .catch(console.log),
   );
-} else {
-  data.value = mockedOptions;
 }
 
 function searchMatch(key, search) {
