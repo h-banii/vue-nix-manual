@@ -4,6 +4,7 @@
   "author": "h-banii",
   "license": "MIT",
   "description": "Vue components to create web manuals for nix modules.",
+  "main": "./dist/vue-nix-manual.mjs",
   "module": "./dist/vue-nix-manual.mjs",
   "scripts": {
     "build": "vite build",
