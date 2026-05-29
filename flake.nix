@@ -49,6 +49,10 @@
         }
       );
 
+      lib = forAllSystems (system: {
+        mkOptionsDoc = pkgsFor.${system}.callPackages ./nix/options-doc.nix;
+      });
+
       devShells = forAllSystems (
         system:
         let
