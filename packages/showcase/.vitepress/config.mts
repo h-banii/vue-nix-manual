@@ -11,9 +11,7 @@ export default defineConfig({
 
     sidebar: [
       {
-        items: [
-          { text: "NixOS module", link: "/pages/nixos-module" },
-        ],
+        items: [{ text: "NixOS module", link: "/pages/nixos-module" }],
       },
     ],
 

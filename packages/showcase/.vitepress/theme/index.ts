@@ -13,6 +13,6 @@ export default {
     });
   },
   enhanceApp({ app }) {
-    app.use(VueNixManual)
+    app.use(VueNixManual);
   },
 } satisfies Theme;

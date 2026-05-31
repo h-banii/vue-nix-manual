@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!!data">
+  <div v-if="!!optionsRef">
     <hr />
     <div :class="$style['search']">
       <label for="nix-module-search">
@@ -15,26 +15,17 @@
         v-model="searchText"
       />
     </div>
-    <div :class="$style['chip-container']" v-if="!!searchFilters.length">
-      <span>Filters:</span>
-      <div v-for="(filter, index) in searchFilters" :key="index">
-        <input
-          type="checkbox"
-          :id="`filter${index}`"
-          v-model="filter.checked"
-          @input="filterToggle($event, index)"
-        />
-        <label :for="`filter${index}`" :class="$style['chip']">
-          {{ filter.label }}
-        </label>
-      </div>
+    <div>
+      <hr />
+      <div>Filters:</div>
+      <FilterChip :filters="filterTree" />
     </div>
     <hr />
-    <div v-for="(value, key, _) in data" :key="key">
-      <div v-if="searchMatch(key, searchText)">
+    <div v-for="(value, key, _) in optionsRef" :key="key">
+      <div v-if="searchMatch(key, searchText) && matchesFilters(key)">
         <div :class="$style['option-container']">
           <h3 :class="$style['option-title']">
-            {{ key.replace(/[^.]+\./, "") }}
+            {{ key }}
           </h3>
           <div :class="$style['option-meta-container']">
             <div :class="$style['option-meta-name']">Name</div>
@@ -57,17 +48,17 @@
             <div :class="$style['option-meta-value']" v-if="!!value.default">
               <code v-html="value.default.text"></code>
             </div>
-            <div :class="$style['option-meta-name']" v-if="!!value.example">
-              Example
-            </div>
-            <div :class="$style['option-meta-value']" v-if="!!value.example">
-              <div
-                v-if="value.example.text.includes('\n')"
-                class="language-nix"
-              >
-                <pre><code v-html="value.example.text"></code></pre>
+            <div v-if="!!value.example">
+              <div :class="$style['option-meta-name']">Example</div>
+              <div :class="$style['option-meta-value']">
+                <div
+                  v-if="value.example.text.includes('\n')"
+                  class="language-nix"
+                >
+                  <pre><code v-html="value.example.text"></code></pre>
+                </div>
+                <code v-else v-html="value.example.text"></code>
               </div>
-              <code v-else v-html="value.example.text"></code>
             </div>
           </div>
         </div>
@@ -77,64 +68,56 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from "vue";
 import mockedOptions from "./options.mock.json";
+import { FilterChipModel, NixosOption } from "../types";
+import FilterChip from "./FilterChip.vue";
+import { createFilters } from "..";
 
-const props = defineProps({
-  file: {
-    type: String,
-    default: null,
-  },
-  options: {
-    type: Object,
-    default: null,
-  },
-  filters: {
-    type: Array,
-    default: [
-      {
-        match: "options",
-        label: "options",
-        checked: false,
-      },
-      {
-        match: "plugins",
-        label: "plugins",
-        checked: false,
-      },
-    ],
-  },
-});
+const props = defineProps<{
+  file: URL;
+  options: Record<string, NixosOption>;
+}>();
 
 const searchText = ref("");
-const searchFilters = ref(props.filters);
-const data = ref(!!props.options ? props.options : mockedOptions);
+const optionsRef = ref<Record<string, NixosOption>>(
+  !!props.options ? props.options : mockedOptions,
+);
 
 if (!!props.file) {
   onMounted(() =>
     fetch(props.file)
       .then((res) => res.json())
-      .then((json) => (data.value = json))
+      .then((json) => (optionsRef.value = json))
       .catch(console.log),
   );
 }
 
-function filterToggle(event, checkedIndex) {
-  searchFilters.value.forEach((filter, index) => {
-    if (index == checkedIndex) {
-      return;
-    }
-    filter.checked = false;
-  });
+const filterTree = ref(createFilters(Object.keys(props.options)));
+
+function searchMatch(key: string, search: string) {
+  return !search || key.includes(search);
 }
 
-function searchMatch(key, search) {
-  const activeFilters = searchFilters.value.filter((f) => f.checked);
-  return (
-    (!search || key.includes(search)) &&
-    (!activeFilters.length || activeFilters.some((f) => key.includes(f.match)))
-  );
+function matchesFilters(key: string) {
+  const reduce = (filters: FilterChipModel[]): string => {
+    let filter =
+      filters.length == 1
+        ? filters[0]
+        : filters.find((filter) => filter.checked);
+
+    if (filter == null) {
+      return "";
+    }
+
+    let subfilter = reduce(filter.children);
+
+    return `${filter?.match}${!!subfilter ? `.${subfilter}` : ``}`;
+  };
+
+  let match = reduce(filterTree.value);
+  return !match || key.includes(match);
 }
 </script>
 

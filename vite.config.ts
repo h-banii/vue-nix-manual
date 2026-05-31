@@ -6,7 +6,7 @@ import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 export default defineConfig({
   build: {
     lib: {
-      entry: "./src/index.js",
+      entry: "./src/index.ts",
       name: "vue-nix-manual",
     },
     rollupOptions: {
