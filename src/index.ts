@@ -24,10 +24,10 @@ export const createFilters = (options: string[]): FilterChipModel[] => {
     .sort(([_a, sub_a], [_b, sub_b]) => sub_b.size - sub_a.size)
     .map(
       ([key, subfilters]: [string, Set<string>]): FilterChipModel => ({
+        id: Math.random(),
         match: key,
-        label: key,
         checked: false,
-        children: createFilters(Array.from(subfilters!)),
+        children: createFilters(Array.from(subfilters)),
       }),
     );
 };

@@ -1,8 +1,8 @@
 declare module "vue-nix-manual";
 
 export interface FilterChipModel {
+  id: number;
   match: string;
-  label: string;
   checked: boolean;
   children: FilterChipModel[];
 }

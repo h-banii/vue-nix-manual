@@ -3,15 +3,15 @@
     <div v-for="(filter, filterIndex) in props.filters" :key="filterIndex">
       <input
         type="checkbox"
-        :id="`filter${filter.match}${filterIndex}`"
+        :id="`filter-${filter.id}`"
         v-model="filter.checked"
         @input="filterToggle(filterIndex)"
       />
       <label
-        :for="`filter${filter.match}${filterIndex}`"
+        :for="`filter-${filter.id}`"
         :class="$style['chip']"
       >
-        {{ filter.label }}
+        {{ filter.match }}
       </label>
     </div>
   </div>
@@ -22,20 +22,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { FilterChipModel } from "../types";
 
 const props = defineProps<{ filters: FilterChipModel[] }>();
 
-const filters = ref<FilterChipModel[]>(props.filters);
 const subFilters = computed(() =>
-  filters.value.length == 1
-    ? filters.value[0].children
-    : filters.value.find((filter) => filter.checked)?.children || [],
+  props.filters.length == 1
+    ? props.filters[0].children
+    : props.filters.find((filter) => filter.checked)?.children || [],
 );
 
 function filterToggle(filterIndex: number) {
   props.filters.forEach((filter, index) => {
+    if (index == filterIndex) {
+      console.log("CHANGING", filter);
+    }
     filter.checked = index == filterIndex;
   });
 }
