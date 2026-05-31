@@ -1,6 +1,6 @@
 import { Plugin } from "vue";
 import SearchOptions from "./components/SearchOptions.vue";
-import { FilterChipModel } from "./types.ts";
+import { FilterChipModel } from "./types";
 
 export const createFilters = (options: string[]): FilterChipModel[] => {
   let root = new Map<string, Set<string>>();

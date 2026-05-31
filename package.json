@@ -6,6 +6,7 @@
   "description": "Vue components to create web manuals for nix modules.",
   "main": "./dist/vue-nix-manual.mjs",
   "module": "./dist/vue-nix-manual.mjs",
+  "types": "./src/types.d.ts",
   "scripts": {
     "build": "vite build",
     "prepare": "npm run build",

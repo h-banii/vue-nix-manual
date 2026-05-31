@@ -1,3 +1,5 @@
+declare module "vue-nix-manual";
+
 export interface FilterChipModel {
   match: string;
   label: string;
