@@ -8,10 +8,12 @@
   "module": "./dist/vue-nix-manual.mjs",
   "scripts": {
     "build": "vite build",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "fmt": "prettier src --write"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",
+    "prettier": "3.8.3",
     "vite": "^7.1.5",
     "vite-plugin-css-injected-by-js": "^3.5.2",
     "vue": "^3.5.21"
