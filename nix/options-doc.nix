@@ -2,6 +2,7 @@
   nixosOptionsDoc,
   lib,
   module,
+  pkgs,
   ...
 }:
 let
@@ -17,6 +18,8 @@ let
       }
       module
     ];
+
+    specialArgs = { inherit pkgs; };
   };
 in
 nixosOptionsDoc {
